@@ -30,7 +30,6 @@ def check_exit():
 
 
 def check_color(xpos, ypos, color):
-    # print(f'{pyautogui.pixel(xpos, ypos)}\n{color}\n')
     if pyautogui.pixel(xpos, ypos) == color:
         return True
     return False
@@ -40,7 +39,7 @@ def pause():
     print('pause')
     while True:
         check_start()
-    pyautogui.sleep(0.01)
+        pyautogui.sleep(0.001)
 
 
 def click(xpos, ypos):
@@ -73,39 +72,33 @@ def smart_click(xpos, ypos, color, sleep_time):
 
 def wait(xpos, ypos, color, timeout):
     timer = time()
-    print('wait')
+    # print('wait')
     while not check_color(xpos, ypos, color):
         check_exit()
         check_pause()
-        # print(time() - timer, timeout)
         if time() - timer > timeout:
+            print('timeout')
             break
         pyautogui.sleep(0.001)
 
 
 def carrots():
     # guy
-    # smart_click(487, 298, (125, 86, 67), 0.1)
     click(487, 298)
     pyautogui.sleep(3)
     # buy carrot
-    # smart_click(564, 412, (155, 141, 132), 0.1)
     click(564, 412)
     # click(564, 412)
     pyautogui.sleep(2)
-    # smart_click(582, 411, (145, 128, 126), 0.1)
     click(582, 411)
     pyautogui.sleep(2)
-    # smart_click(665, 304, (57, 42, 50), 0.1)
     click(665, 304)
     pyautogui.sleep(1)
     # use carrot
     click_left(665, 304)
     pyautogui.sleep(1)
-    # smart_click(846, 404, (255, 255, 255), 0.1)
     click(846, 404)
     pyautogui.sleep(1)
-    # smart_click(395, 457, (255, 255, 255), 0.1)
     click(395, 457)
     pyautogui.sleep(1)
     click_left(395, 457)
@@ -114,11 +107,23 @@ def carrots():
     pyautogui.sleep(1)
 
 
+def skip_carrots():
+    wait(347, 149, (184, 126, 80), 5)
+    # smart_click(347, 149, (184, 126, 80), 0.1)  # go back
+    click(347, 149)
+    pyautogui.sleep(3)
+    # wait(680, 147, (184, 126, 80), 5)
+    # smart_click(680, 147, (184, 126, 80), 0.1)  # go back (again)
+    click(680, 157)
+    pyautogui.sleep(5)
+
+
 def start():
 
+    count = 0
+    buy_carrots = False
     pyautogui.sleep(0.5)
     print('start')
-    # finished = False
     while True:
         check_exit()
         check_pause()
@@ -134,34 +139,19 @@ def start():
         # smart_click(457, 475, (28, 132, 90), 0.1)  # slime in battle
         smart_click(451, 460, (118, 221, 161), 0.1)  # slime in battle
         if smart_click(841, 734, (255, 128, 255), 0.1):  # or finished:  # end battle
-            # finished = True
-            # print(f'end fight {time()}')
-            '''pyautogui.moveTo(100, 100)
-            pyautogui.sleep(0.1)
-            if check_color(841, 734, (255, 128, 255)):
-                break'''
 
-            # pyautogui.sleep(0.001)
-            # click(841, 734)
-
+            count += 1
+            print(f'Total runs: {count}')
             pyautogui.sleep(3)
 
-            carrots()
-
-            click(539, 152)  # exit forest
-            pyautogui.sleep(2)
-            click(676, 154)  # exit forest
-            pyautogui.sleep(3)
-
-            '''wait(347, 149, (184, 126, 80), 5)
-            smart_click(347, 149, (184, 126, 80), 0.1)  # go back
-            pyautogui.sleep(3)
-            wait(680, 147, (184, 126, 80), 5)
-            if smart_click(680, 147, (184, 126, 80), 0.1):  # go back (again)
-                finished = False'''
-        '''if check_color(681, 458, (108, 216, 32)):
-            pyautogui.sleep(0.1)
-            click(681, 458)'''
+            if buy_carrots:
+                carrots()
+                click(539, 152)  # exit forest
+                pyautogui.sleep(2)
+                click(676, 154)  # exit forest
+                pyautogui.sleep(3)
+            else:
+                skip_carrots()
 
 
 pause()
