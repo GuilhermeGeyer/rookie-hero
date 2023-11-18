@@ -8,6 +8,7 @@ Created on Thu Nov 16 14:12:04 2023
 import pyautogui
 import sys
 from time import time
+from winsound import Beep
 
 
 def exit():
@@ -46,112 +47,202 @@ def click(xpos, ypos):
     check_exit()
     check_pause()
     pyautogui.moveTo(xpos, ypos)
-    pyautogui.sleep(0.001)
+    sleep(0.001)
     pyautogui.mouseDown()
-    pyautogui.sleep(0.05)
+    sleep(0.05)
     pyautogui.mouseUp()
-    pyautogui.sleep(0.001)
+    sleep(0.001)
 
 
 def click_left(xpos, ypos):
     pyautogui.moveTo(xpos, ypos)
-    pyautogui.sleep(0.001)
+    sleep(0.001)
     pyautogui.mouseDown(button='secondary')
-    pyautogui.sleep(0.05)
+    sleep(0.05)
     pyautogui.mouseUp(button='secondary')
-    pyautogui.sleep(0.001)
+    sleep(0.001)
 
 
 def smart_click(xpos, ypos, color, sleep_time):
     if check_color(xpos, ypos, color):
-        pyautogui.sleep(sleep_time)
+        sleep(sleep_time)
         click(xpos, ypos)
         return True
     return False
 
 
-def wait(xpos, ypos, color, timeout):
+def wait(xpos, ypos, color, timeout=0):
     timer = time()
     # print('wait')
     while not check_color(xpos, ypos, color):
         check_exit()
         check_pause()
-        if time() - timer > timeout:
+        if time() - timer > timeout and timeout:
             print('timeout')
             break
         pyautogui.sleep(0.001)
 
 
+def wait_click(xpos, ypos, color, sleep_time, timeout=0):
+    wait(xpos, ypos, color, timeout=timeout)
+    smart_click(xpos, ypos, color, sleep_time)
+
+
+def sleep(sleep_time):
+    timer = time()
+    while time() - timer < sleep_time:
+        pyautogui.sleep(0.001)
+        check_exit()
+        check_pause()
+
+
+def press_key(key, sleep_time=0):
+    pyautogui.keyDown(key)
+    # sleep(0.1)
+    Beep(1000, 100)
+    pyautogui.keyUp(key)
+    sleep(sleep_time)
+
+
+def format_time(seconds):
+    minutes = 0
+    hours = 0
+    if seconds > 3600:
+        hours = int(seconds // 3600)
+        seconds = seconds % 3600
+    if seconds > 60:
+        minutes = int(seconds // 60)
+        seconds %= 60
+    return f'{hours}h {minutes:02d}m {seconds:.2f}s'
+
+
 def carrots():
     # guy
     click(487, 298)
-    pyautogui.sleep(3)
+    sleep(3)
     # buy carrot
     click(564, 412)
     # click(564, 412)
-    pyautogui.sleep(2)
+    sleep(2)
     click(582, 411)
-    pyautogui.sleep(2)
+    sleep(2)
     click(665, 304)
-    pyautogui.sleep(1)
+    sleep(1)
     # use carrot
     click_left(665, 304)
-    pyautogui.sleep(1)
+    sleep(1)
     click(846, 404)
-    pyautogui.sleep(1)
+    sleep(1)
     click(395, 457)
-    pyautogui.sleep(1)
+    sleep(1)
     click_left(395, 457)
-    pyautogui.sleep(1)
+    sleep(1)
     click_left(395, 457)
-    pyautogui.sleep(1)
+    sleep(1)
 
 
 def skip_carrots():
-    wait(347, 149, (184, 126, 80), 5)
+    # wait(347, 149, (184, 126, 80), 5)
+    wait(693, 415, (243, 244, 227))
     # smart_click(347, 149, (184, 126, 80), 0.1)  # go back
-    click(347, 149)
-    pyautogui.sleep(3)
-    # wait(680, 147, (184, 126, 80), 5)
+    # click(347, 149)
+    sleep(0.2)
+    click(358, 31)
+    # sleep(3)
+    wait(1000, 721, (251, 251, 232))
+    sleep(0.2)
     # smart_click(680, 147, (184, 126, 80), 0.1)  # go back (again)
-    click(680, 157)
-    pyautogui.sleep(5)
+    # click(680, 157)
+    click(675, 37)
+    sleep(1)
+
+
+def heal_after_battle(sleep_time, heal=False):
+    press_key('x', sleep_time)
+
+    if heal:
+        press_key('z', sleep_time)
+        press_key('z', sleep_time)
+        press_key('x', sleep_time)
+
+    # save
+    press_key('up', sleep_time)
+    press_key('up', sleep_time)
+    press_key('z', sleep_time)
+    press_key('z', sleep_time)
+
+    press_key('x', sleep_time)
 
 
 def start():
 
     count = 0
+    run_time = time()
     buy_carrots = False
-    pyautogui.sleep(0.5)
+    sleep(0.5)
     print('start')
+
+    # heal_after_battle()
+    # exit()
+
     while True:
         check_exit()
         check_pause()
-        smart_click(675, 454, (53, 64, 72), 0.1)  # map
-        # click(681, 458)  # map
-        # print(f'{pyautogui.pixel(681, 458)}\n{(108, 216, 32)}')
-        # smart_click(1083, 726, (173, 208, 47), 0.1)
-        if check_color(1156, 736, (28, 132, 90)):
-            click(1011, 736)  # (slime) over sign
-            pyautogui.sleep(3)
-        # smart_click(1104, 731, (28, 132, 90), 0.1)  # slime
-        smart_click(325, 581, (206, 232, 255), 0.1)  # attack
-        # smart_click(457, 475, (28, 132, 90), 0.1)  # slime in battle
-        smart_click(451, 460, (118, 221, 161), 0.1)  # slime in battle
-        if smart_click(841, 734, (255, 128, 255), 0.1):  # or finished:  # end battle
+        # wait_click(682, 364, (53, 64, 72), 0.1)  # map
+        wait(445, 141, (255, 255, 255))
+        sleep(0.2)
+        click(682, 364)
 
-            count += 1
-            print(f'Total runs: {count}')
-            pyautogui.sleep(3)
+        # click(675, 454)  # map
+        # sleep(3)
 
-            if buy_carrots:
-                carrots()
-                click(539, 152)  # exit forest
-                pyautogui.sleep(2)
-                click(676, 154)  # exit forest
-                pyautogui.sleep(3)
-            else:
-                skip_carrots()
+        wait_click(1061, 690, (146, 194, 93), 0.1)  # over sign
+        # click(1011, 736)  # (slime) over sign
+        # sleep(7)
+
+        # battle
+        wait_click(316, 516, (206, 232, 255), 0.1)  # attack
+        # click(325, 581)  # attack
+        # sleep(0.5)
+
+        wait_click(430, 378, (117, 221, 160), 0.1)  # slime in battle
+        # click(451, 460)  # slime in battle
+        # sleep(5)
+        wait(316, 516, (206, 232, 255))  # wait for turn
+        # sleep(0.2)
+
+        # repeat
+        wait_click(316, 516, (206, 232, 255), 0.1)  # attack
+        # click(325, 581)  # attack
+        # sleep(0.2)
+
+        wait_click(430, 378, (117, 221, 160), 0.1)  # slime in battle
+        # click(451, 460)  # slime in battle
+        # sleep(5)
+        # sleep(1)
+
+        wait(228, 152, (255, 255, 255))  # victory screen
+
+        count += 1
+        print(f'Total runs: {count}\nRun time: ' +
+              f'{format_time(time() - run_time)}\n')
+        click(228, 152)   # end battle
+        sleep(0.05)
+        click(228, 152)   # end battle
+        sleep(0.1)
+
+        wait(693, 415, (243, 244, 227))
+        sleep(0.2)
+        heal_after_battle(0.2)
+
+        if buy_carrots:
+            carrots()
+            click(539, 152)  # exit forest
+            sleep(2)
+            click(676, 154)  # exit forest
+            sleep(3)
+        else:
+            skip_carrots()
 
 
 pause()
