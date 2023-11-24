@@ -73,7 +73,6 @@ def smart_click(xpos, ypos, color, sleep_time):
 
 def wait(xpos, ypos, color, timeout=0):
     timer = time()
-    # print('wait')
     while not check_color(xpos, ypos, color):
         check_exit()
         check_pause()
@@ -98,7 +97,6 @@ def sleep(sleep_time):
 
 def press_key(key, sleep_time=0):
     pyautogui.keyDown(key)
-    # sleep(0.1)
     Beep(1000, 100)
     pyautogui.keyUp(key)
     sleep(sleep_time)
@@ -117,12 +115,11 @@ def format_time(seconds):
 
 
 def carrots():
-    # guy
+    # carrot guy
     click(487, 298)
     sleep(3)
     # buy carrot
     click(564, 412)
-    # click(564, 412)
     sleep(2)
     click(582, 411)
     sleep(2)
@@ -142,18 +139,12 @@ def carrots():
 
 
 def skip_carrots():
-    # wait(347, 149, (184, 126, 80), 5)
     wait(693, 415, (243, 244, 227))
-    # smart_click(347, 149, (184, 126, 80), 0.1)  # go back
-    # click(347, 149)
     sleep(0.2)
-    click(358, 31)
-    # sleep(3)
+    click(358, 31)  # go back
     wait(1000, 721, (251, 251, 232))
     sleep(0.2)
-    # smart_click(680, 147, (184, 126, 80), 0.1)  # go back (again)
-    # click(680, 157)
-    click(675, 37)
+    click(675, 37)  # go back (again)
     sleep(1)
 
 
@@ -182,44 +173,25 @@ def start():
     sleep(0.5)
     print('start')
 
-    # heal_after_battle()
-    # exit()
-
     while True:
         check_exit()
         check_pause()
-        # wait_click(682, 364, (53, 64, 72), 0.1)  # map
         wait(445, 141, (255, 255, 255))
         sleep(0.2)
-        click(682, 364)
-
-        # click(675, 454)  # map
-        # sleep(3)
+        click(682, 364)  # map
 
         wait_click(1061, 690, (146, 194, 93), 0.1)  # over sign
-        # click(1011, 736)  # (slime) over sign
-        # sleep(7)
 
         # battle
         wait_click(316, 516, (206, 232, 255), 0.1)  # attack
-        # click(325, 581)  # attack
-        # sleep(0.5)
 
         wait_click(430, 378, (117, 221, 160), 0.1)  # slime in battle
-        # click(451, 460)  # slime in battle
-        # sleep(5)
         wait(316, 516, (206, 232, 255))  # wait for turn
-        # sleep(0.2)
 
         # repeat
         wait_click(316, 516, (206, 232, 255), 0.1)  # attack
-        # click(325, 581)  # attack
-        # sleep(0.2)
 
         wait_click(430, 378, (117, 221, 160), 0.1)  # slime in battle
-        # click(451, 460)  # slime in battle
-        # sleep(5)
-        # sleep(1)
 
         wait(228, 152, (255, 255, 255))  # victory screen
 
